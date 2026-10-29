@@ -1,28 +1,35 @@
-name: Software Versions Check
+name: Print Software Versions
 
 on:
   push:
   workflow_dispatch:
 
 jobs:
-  check-versions:
+  software-versions:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check Ubuntu version
-        run: lsb_release -a
-
-      - name: Check Python version
-        run: python3 --version
-
       - name: Check Node.js version
         run: node --version
 
       - name: Check npm version
         run: npm --version
 
-      - name: Check Git version
-        run: git --version
+      - name: Check JavaScript runtime
+        run: node -p "process.versions.v8"
 
-      - name: Check Java version
-        run: java -version
+  mongodb-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install MongoDB tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnupg curl
+          curl -fsSL https://pgp.mongodb.com/server-8.0.asc | sudo gpg --dearmor -o /usr/share/keyrings/mongodb-server-8.0.gpg
+          echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-org
+
+      - name: Check MongoDB version
+        run: mongod --version
