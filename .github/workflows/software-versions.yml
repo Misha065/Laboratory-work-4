@@ -1,0 +1,28 @@
+name: Software Versions Check
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  check-versions:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Ubuntu version
+        run: lsb_release -a
+
+      - name: Check Python version
+        run: python3 --version
+
+      - name: Check Node.js version
+        run: node --version
+
+      - name: Check npm version
+        run: npm --version
+
+      - name: Check Git version
+        run: git --version
+
+      - name: Check Java version
+        run: java -version
