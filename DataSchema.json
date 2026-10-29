@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Yoga Tree Pose Trainer Data Schema",
+  "description": "Структура даних тренувальної сесії Yoga Tree Pose Trainer",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "trainingDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Дата тренування у форматі YYYY-MM-DD"
+    },
+    "trainingStatus": {
+      "type": "string",
+      "description": "Поточний стан тренування",
+      "pattern": "^(Розпочато|Завершено)$"
+    },
+    "videoStream": {
+      "type": "object",
+      "description": "Інформація про відеопотік",
+      "additionalProperties": false,
+      "properties": {
+        "streamStatus": {
+          "type": "string",
+          "enum": ["Активний", "Неактивний"]
+        }
+      },
+      "required": ["streamStatus"]
+    },
+    "bodyPoses": {
+      "type": "array",
+      "description": "Визначені положення тіла",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "armsPosition": {
+            "type": "string",
+            "enum": ["Правильне", "Неправильне"]
+          },
+          "legsPosition": {
+            "type": "string",
+            "enum": ["Правильне", "Неправильне"]
+          },
+          "balance": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "balanceStatus": {
+                "type": "string",
+                "enum": ["Стабільна", "Нестабільна"]
+              },
+              "stability": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": ["balanceStatus", "stability"]
+          },
+          "analysisResults": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "poseCorrectness": {
+                  "type": "string",
+                  "enum": ["Правильне", "Неправильне"]
+                },
+                "detectedDeviations": {
+                  "type": "string",
+                  "maxLength": 500
+                },
+                "hints": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "hintText": {
+                        "type": "string",
+                        "description": "Текст рекомендації для користувача",
+                        "minLength": 1,
+                        "maxLength": 300,
+                        "pattern": "^[^\\r\\n]+$"
+                      }
+                    },
+                    "required": ["hintText"]
+                  }
+                }
+              },
+              "required": [
+                "poseCorrectness",
+                "detectedDeviations",
+                "hints"
+              ]
+            }
+          }
+        },
+        "required": [
+          "armsPosition",
+          "legsPosition",
+          "balance",
+          "analysisResults"
+        ]
+      }
+    }
+  },
+  "required": [
+    "trainingDate",
+    "trainingStatus",
+    "videoStream",
+    "bodyPoses"
+  ]
+}
