@@ -1,0 +1,24 @@
+name: Program Code Convention
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  javascript-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Biome
+        run: npm install --no-save --save-exact @biomejs/biome
+
+      - name: Check ProgramCode.js
+        run: npx biome check ProgramCode.js
