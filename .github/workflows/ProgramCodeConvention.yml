@@ -21,4 +21,4 @@ jobs:
         run: npm install --no-save --save-exact @biomejs/biome
 
       - name: Check ProgramCodeModified.js
-        run: npx biome check ProgramCodeModified.js
+run: npx biome check ProgramCodeModified.js
